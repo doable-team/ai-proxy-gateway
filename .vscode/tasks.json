@@ -1,0 +1,117 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Setup: Install All Dependencies",
+      "type": "shell",
+      "command": "npm install && cd web && npm install",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Install root + web dependencies"
+    },
+    {
+      "label": "Dev: Start Full Dev Server",
+      "type": "shell",
+      "command": "npm run dev",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "detail": "API on :4141 + Vite on :5173"
+    },
+    {
+      "label": "Dev: Server Only",
+      "type": "shell",
+      "command": "npm run dev:server",
+      "isBackground": true,
+      "problemMatcher": [],
+      "detail": "Express API + proxy on :4141"
+    },
+    {
+      "label": "Dev: Web Only",
+      "type": "shell",
+      "command": "npm run dev:web",
+      "isBackground": true,
+      "problemMatcher": [],
+      "detail": "Vite dev server on :5173"
+    },
+    {
+      "label": "Build: Full Production Build",
+      "type": "shell",
+      "command": "npm run build",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Build server + web → dist/"
+    },
+    {
+      "label": "Build: Server Only",
+      "type": "shell",
+      "command": "npm run build:server",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "esbuild → dist/index.js"
+    },
+    {
+      "label": "Build: Web Only",
+      "type": "shell",
+      "command": "npm run build:web",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Vite build → web/dist/"
+    },
+    {
+      "label": "Start: Production Server",
+      "type": "shell",
+      "command": "npm start",
+      "isBackground": true,
+      "problemMatcher": [],
+      "detail": "Run built server from dist/"
+    },
+    {
+      "label": "Test: Run All Tests",
+      "type": "shell",
+      "command": "npm run test:all",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "detail": "Server + frontend tests (vitest)"
+    },
+    {
+      "label": "Test: Server Tests",
+      "type": "shell",
+      "command": "npm test",
+      "group": "test",
+      "problemMatcher": [],
+      "detail": "Server unit + integration tests"
+    },
+    {
+      "label": "Test: Web Tests",
+      "type": "shell",
+      "command": "cd web && npm test",
+      "group": "test",
+      "problemMatcher": [],
+      "detail": "Frontend utility tests"
+    },
+    {
+      "label": "Test: Watch Mode",
+      "type": "shell",
+      "command": "npm run test:watch",
+      "isBackground": true,
+      "problemMatcher": [],
+      "detail": "Re-run tests on file changes"
+    },
+    {
+      "label": "TypeCheck: Web",
+      "type": "shell",
+      "command": "cd web && npx tsc -b --noEmit",
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "detail": "Check frontend TypeScript errors"
+    }
+  ]
+}
