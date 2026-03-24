@@ -30,24 +30,43 @@ jobs:
       - name: Run tests
         run: npm test
 
+      # Check if this version is already published
+      - name: Check npm version
+        id: check
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          PUBLISHED=$(npm view ai-proxy-gateway version 2>/dev/null || echo "none")
+          echo "local=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+          echo "published=$PUBLISHED" >> $GITHUB_OUTPUT
+          if [ "$PACKAGE_VERSION" = "$PUBLISHED" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Version $PACKAGE_VERSION already published — skipping"
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "Publishing $PACKAGE_VERSION (current: $PUBLISHED)"
+          fi
+
       # Publish to npmjs.org
       - name: Publish to npm
+        if: steps.check.outputs.skip == 'false'
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # Publish to GitHub Packages
-      - uses: actions/setup-node@v4
+      - name: Setup GitHub Packages registry
+        if: steps.check.outputs.skip == 'false'
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
           registry-url: 'https://npm.pkg.github.com'
 
       - name: Publish to GitHub Packages
+        if: steps.check.outputs.skip == 'false'
         run: |
-          echo '{"name":"@mrbeandev/ai-proxy-gateway"}' | node -e "
+          node -e "
             const pkg = require('./package.json');
-            const override = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
-            Object.assign(pkg, override);
+            pkg.name = '@mrbeandev/ai-proxy-gateway';
             require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));
           "
           npm publish --access public
