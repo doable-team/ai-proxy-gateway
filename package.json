@@ -1,6 +1,6 @@
 {
   "name": "ai-proxy-gateway",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A single-command local AI proxy gateway with OpenAI-compatible endpoints for OpenAI, Anthropic, and Gemini",
   "main": "dist/index.js",
   "bin": {
