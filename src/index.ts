@@ -20,8 +20,12 @@ async function main() {
     console.log('')
 
     if (!noOpen) {
-      const { default: open } = await import('open')
-      open(`http://localhost:${finalPort}`)
+      try {
+        const { default: open } = await import('open')
+        open(`http://localhost:${finalPort}`)
+      } catch {
+        // open not available (e.g. npx, headless) — ignore
+      }
     }
   } catch (err: any) {
     if (err.code === 'EADDRINUSE') {

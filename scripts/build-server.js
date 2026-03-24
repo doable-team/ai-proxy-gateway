@@ -9,7 +9,7 @@ build({
   format: 'cjs',
   outfile: path.join(__dirname, '../dist/index.js'),
   banner: { js: '#!/usr/bin/env node' },
-  external: ['node:*', 'node:sqlite'],
+  external: ['node:*', 'node:sqlite', 'open'],
 }).then(() => {
   console.log('dist/index.js built')
 }).catch(e => {

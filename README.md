@@ -99,6 +99,14 @@ PORT=8080 npx ai-proxy-gateway
 npx ai-proxy-gateway --port 8080
 ```
 
+### Data Directory
+
+All data (SQLite database, config) is stored in `~/.ai-proxy-gateway/` by default. Override with:
+
+```bash
+PROXY_GATEWAY_HOME=/path/to/custom/dir npx ai-proxy-gateway
+```
+
 ### Model Aliases
 
 Create custom model names through the dashboard (Services → expand a service → Model Aliases):

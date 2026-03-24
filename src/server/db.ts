@@ -3,7 +3,7 @@ import path from 'path'
 import os from 'os'
 import fs from 'fs'
 
-const DATA_DIR = path.join(os.homedir(), '.ai-proxy-gateway')
+export const DATA_DIR = process.env.PROXY_GATEWAY_HOME || path.join(os.homedir(), '.ai-proxy-gateway')
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true })
 }
