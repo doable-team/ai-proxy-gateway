@@ -1,3 +1,10 @@
+// Suppress Node.js experimental warnings (node:sqlite)
+const originalEmit = process.emit.bind(process)
+process.emit = function (event: string, ...args: any[]) {
+  if (event === 'warning' && (args[0] as any)?.name === 'ExperimentalWarning') return false
+  return originalEmit(event, ...args)
+} as typeof process.emit
+
 import { startServer } from './server/app'
 
 const port = parseInt(process.env.PORT || '4141', 10)
