@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Copy, Check } from 'lucide-react'
+import { Copy, Check, Pencil, Save, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge'
 import { api } from '@/lib/api'
 
 function CopyButton({ value }: { value: string }) {
@@ -19,6 +20,119 @@ function CopyButton({ value }: { value: string }) {
     </Button>
   )
 }
+
+// ─── Model Pricing Manager ───────────────────────────────────────────────────
+
+function PricingManager() {
+  const [pricing, setPricing] = useState<any[]>([])
+  const [editId, setEditId] = useState<string | null>(null)
+  const [editInput, setEditInput] = useState('')
+  const [editOutput, setEditOutput] = useState('')
+  const [newModel, setNewModel] = useState('')
+  const [newInput, setNewInput] = useState('')
+  const [newOutput, setNewOutput] = useState('')
+  const [saving, setSaving] = useState(false)
+
+  const load = () => { api.getPricing().then(setPricing).catch(() => {}) }
+  useEffect(() => { load() }, [])
+
+  async function savePricing(model: string, inputCost: string, outputCost: string) {
+    setSaving(true)
+    try {
+      await api.updatePricing(model, {
+        input_cost_per_1k: parseFloat(inputCost),
+        output_cost_per_1k: parseFloat(outputCost),
+      })
+      setEditId(null)
+      load()
+    } catch (e: any) { alert(e.message) }
+    finally { setSaving(false) }
+  }
+
+  async function addPricing(e: React.FormEvent) {
+    e.preventDefault()
+    if (!newModel.trim() || !newInput || !newOutput) return
+    await savePricing(newModel.trim(), newInput, newOutput)
+    setNewModel(''); setNewInput(''); setNewOutput('')
+  }
+
+  function startEdit(p: any) {
+    setEditId(p.model)
+    setEditInput(String(p.input_cost_per_1k))
+    setEditOutput(String(p.output_cost_per_1k))
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-sm">Model Pricing</CardTitle>
+        <CardDescription className="text-xs">Set input/output cost per 1K tokens (USD) for cost estimation</CardDescription>
+      </CardHeader>
+      <CardContent className="px-0 py-0">
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left py-2 px-4 pl-5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Model</th>
+                <th className="text-left py-2 px-4 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Input / 1K tokens</th>
+                <th className="text-left py-2 px-4 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Output / 1K tokens</th>
+                <th className="text-left py-2 px-4 pr-5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground w-16"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {pricing.map((p: any) => (
+                <tr key={p.model} className="border-b last:border-0 hover:bg-muted/30">
+                  <td className="py-1.5 px-4 pl-5 font-mono">
+                    {p.model}
+                    {p.is_custom ? <Badge variant="outline" className="ml-2 text-[9px] h-4 px-1">custom</Badge> : null}
+                  </td>
+                  {editId === p.model ? (
+                    <>
+                      <td className="py-1.5 px-4">
+                        <Input className="h-7 w-28 text-xs font-mono" type="number" step="any" value={editInput} onChange={e => setEditInput(e.target.value)} />
+                      </td>
+                      <td className="py-1.5 px-4">
+                        <Input className="h-7 w-28 text-xs font-mono" type="number" step="any" value={editOutput} onChange={e => setEditOutput(e.target.value)} />
+                      </td>
+                      <td className="py-1.5 px-4 pr-5">
+                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0" disabled={saving}
+                          onClick={() => savePricing(p.model, editInput, editOutput)}>
+                          <Save size={11} />
+                        </Button>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td className="py-1.5 px-4 font-mono text-muted-foreground">${p.input_cost_per_1k}</td>
+                      <td className="py-1.5 px-4 font-mono text-muted-foreground">${p.output_cost_per_1k}</td>
+                      <td className="py-1.5 px-4 pr-5">
+                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={() => startEdit(p)}>
+                          <Pencil size={11} />
+                        </Button>
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Add new pricing row */}
+        <form onSubmit={addPricing} className="flex items-center gap-2 px-5 py-3 border-t">
+          <Input className="h-7 text-xs font-mono flex-1" value={newModel} onChange={e => setNewModel(e.target.value)} placeholder="Model ID (e.g. gpt-5)" required />
+          <Input className="h-7 text-xs font-mono w-28" type="number" step="any" value={newInput} onChange={e => setNewInput(e.target.value)} placeholder="Input $/1K" required />
+          <Input className="h-7 text-xs font-mono w-28" type="number" step="any" value={newOutput} onChange={e => setNewOutput(e.target.value)} placeholder="Output $/1K" required />
+          <Button type="submit" size="sm" variant="outline" className="h-7 text-xs shrink-0 gap-1" disabled={saving}>
+            <Plus size={11} /> Add
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
+  )
+}
+
+// ─── Settings Page ────────────────────────────────────────────────────────────
 
 export default function Settings() {
   const [settings, setSettings] = useState<Record<string, string>>({})
@@ -45,7 +159,7 @@ export default function Settings() {
   const endpointUrl = `${baseUrl}/v1`
 
   return (
-    <div className="flex flex-col gap-5 max-w-2xl">
+    <div className="flex flex-col gap-5 max-w-3xl">
       {/* Endpoint Info */}
       <Card>
         <CardHeader>
@@ -129,6 +243,9 @@ export default function Settings() {
           {saved ? '✓ Saved' : 'Save Changes'}
         </Button>
       </div>
+
+      {/* Model Pricing */}
+      <PricingManager />
     </div>
   )
 }

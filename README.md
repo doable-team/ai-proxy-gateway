@@ -13,6 +13,34 @@ That's it. You now have:
 
 ---
 
+## Demo
+
+<!-- REPLACE: Upload demo video to GitHub and paste the URL below -->
+<!-- To upload: Edit this file on GitHub, drag & drop your video file into the editor -->
+
+https://github.com/user-attachments/assets/REPLACE_WITH_DEMO_VIDEO_ID
+
+---
+
+## Screenshots
+
+<!-- REPLACE: Upload screenshots to GitHub and paste the URLs below -->
+<!-- To upload: Edit this file on GitHub, drag & drop images into the editor -->
+
+### Dashboard
+![Dashboard](https://github.com/user-attachments/assets/REPLACE_WITH_DASHBOARD_SCREENSHOT)
+
+### Services
+![Services](https://github.com/user-attachments/assets/REPLACE_WITH_SERVICES_SCREENSHOT)
+
+### Logs
+![Logs](https://github.com/user-attachments/assets/REPLACE_WITH_LOGS_SCREENSHOT)
+
+### Settings
+![Settings](https://github.com/user-attachments/assets/REPLACE_WITH_SETTINGS_SCREENSHOT)
+
+---
+
 ## Why?
 
 There are proxy tools like LiteLLM, but they require Python, config files, environment setup, and often Docker. This project takes a different approach:
@@ -28,13 +56,14 @@ There are proxy tools like LiteLLM, but they require Python, config files, envir
 
 - **OpenAI-Compatible Proxy** — `/v1/chat/completions` and `/v1/models` endpoints with full streaming (SSE) support
 - **Multi-Provider Routing** — automatically routes `gpt-*` → OpenAI, `claude-*` → Anthropic, `gemini-*` → Google Gemini
+- **Dynamic Model Management** — add, remove, or auto-fetch models from each provider's API
 - **Model Aliases** — create custom names like `fast` → `gpt-4o-mini` or `smart` → `claude-sonnet-4`
 - **Dashboard** — real-time stats, request volume charts, top models breakdown, recent activity feed
-- **Request Logging** — every proxied request is logged with tokens, latency, cost, and status
-- **Cost Tracking** — automatic cost estimation based on pre-seeded model pricing (customizable)
+- **Request Logging** — every proxied request is logged with input/output tokens, latency, cost, and status
+- **Cost Tracking** — automatic cost estimation with customizable per-model pricing
 - **Service Management** — add, edit, enable/disable AI providers through the UI
 - **Dark/Light Theme** — clean minimal UI with the Neural Canvas design system
-- **SQLite Storage** — everything stored locally at `~/.ai-proxy-gateway/gateway.db`
+- **SQLite Storage** — everything stored locally at `~/.ai-proxy-gateway/`
 
 ---
 
@@ -134,6 +163,7 @@ Requests are routed by model name prefix:
 | `claude-*` | Anthropic |
 | `gemini-*` | Google Gemini |
 | Custom alias | Resolved to target model first |
+| Any model in service_models | Routes to the owning service |
 
 ---
 
@@ -159,14 +189,14 @@ npm run dev
 │       ├── app.ts          # Express app
 │       ├── db.ts           # SQLite setup + migrations
 │       ├── proxy.ts        # OpenAI-compatible proxy router
-│       ├── api/            # REST API (services, logs, stats, settings, aliases)
+│       ├── api/            # REST API (services, logs, stats, settings, aliases, models)
 │       └── providers/      # Provider adapters (openai, anthropic, gemini)
 ├── web/                    # Dashboard (React + Vite)
 │   └── src/
 │       ├── components/     # Layout, Sidebar, shadcn/ui components
 │       ├── pages/          # Dashboard, Services, Logs, Settings
 │       └── lib/            # API client, utilities
-├── scripts/                # Build scripts
+├── scripts/                # Build + seed scripts
 ├── DESIGN.md               # Design system reference
 └── dist/                   # Production build output
 ```
@@ -204,9 +234,12 @@ npm run test:all       # Everything
 | `GET` | `/api/stats` | Dashboard statistics |
 | `GET` | `/api/stats/timeseries` | 7-day request volume by provider |
 | `GET/POST/PUT/DELETE` | `/api/services` | CRUD for AI provider services |
+| `GET/POST/DELETE` | `/api/services/:id/models` | Manage models per service |
+| `POST` | `/api/services/:id/models/fetch` | Auto-fetch models from provider API |
 | `GET` | `/api/logs` | Paginated request logs (filterable) |
 | `GET/POST/PUT/DELETE` | `/api/aliases` | Model alias management |
 | `GET/PUT` | `/api/settings` | Gateway configuration |
+| `GET/PUT` | `/api/settings/pricing` | Model pricing management |
 
 ---
 

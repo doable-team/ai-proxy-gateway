@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
+import { useIsMobile } from '@/hooks/use-mobile'
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -111,6 +112,7 @@ export default function Logs() {
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<any>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const isMobile = useIsMobile()
 
   const load = useCallback(async () => {
     const params: Record<string, string> = { page: String(page), limit: '50' }
@@ -224,8 +226,8 @@ export default function Logs() {
         </Card>
 
         {/* Desktop: side panel */}
-        {selected && (
-          <Card className="w-80 shrink-0 py-0 h-fit hidden md:block">
+        {selected && !isMobile && (
+          <Card className="w-80 shrink-0 py-0 h-fit">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Request Detail</span>
@@ -238,18 +240,20 @@ export default function Logs() {
       </div>
 
       {/* Mobile: bottom sheet dialog */}
-      <Sheet open={!!selected} onOpenChange={open => { if (!open) setSelected(null) }}>
-        <SheetContent side="bottom" className="md:hidden max-h-[85vh] overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle className="text-sm">Request Detail</SheetTitle>
-          </SheetHeader>
-          {selected && (
-            <div className="px-4 pb-4">
-              <DetailContent selected={selected} />
-            </div>
-          )}
-        </SheetContent>
-      </Sheet>
+      {isMobile && (
+        <Sheet open={!!selected} onOpenChange={open => { if (!open) setSelected(null) }}>
+          <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto">
+            <SheetHeader>
+              <SheetTitle className="text-sm">Request Detail</SheetTitle>
+            </SheetHeader>
+            {selected && (
+              <div className="px-4 pb-4">
+                <DetailContent selected={selected} />
+              </div>
+            )}
+          </SheetContent>
+        </Sheet>
+      )}
     </div>
   )
 }
