@@ -18,7 +18,7 @@ That's it. You now have:
 <!-- REPLACE: Upload demo video to GitHub and paste the URL below -->
 <!-- To upload: Edit this file on GitHub, drag & drop your video file into the editor -->
 
-https://github.com/user-attachments/assets/REPLACE_WITH_DEMO_VIDEO_ID
+https://github.com/user-attachments/assets/f6bc8d7b-7b74-419c-af87-9592f59c24bc
 
 ---
 
@@ -28,16 +28,22 @@ https://github.com/user-attachments/assets/REPLACE_WITH_DEMO_VIDEO_ID
 <!-- To upload: Edit this file on GitHub, drag & drop images into the editor -->
 
 ### Dashboard
-![Dashboard](https://github.com/user-attachments/assets/REPLACE_WITH_DASHBOARD_SCREENSHOT)
+
+<img width="3836" height="1900" alt="screenshot1" src="https://github.com/user-attachments/assets/e45f5cc1-1c68-4907-8285-523db543bb11" />
 
 ### Services
-![Services](https://github.com/user-attachments/assets/REPLACE_WITH_SERVICES_SCREENSHOT)
+
+<img width="3834" height="1904" alt="screenshot2" src="https://github.com/user-attachments/assets/e0734176-1737-4e36-9777-73ab9ca09ee8" />
 
 ### Logs
-![Logs](https://github.com/user-attachments/assets/REPLACE_WITH_LOGS_SCREENSHOT)
+
+<img width="3840" height="1900" alt="image" src="https://github.com/user-attachments/assets/4875bd04-661c-495e-b737-42986483d73f" />
+
 
 ### Settings
-![Settings](https://github.com/user-attachments/assets/REPLACE_WITH_SETTINGS_SCREENSHOT)
+
+<img width="3838" height="1912" alt="image" src="https://github.com/user-attachments/assets/ebc89567-30b2-4c4c-b85c-4cddd8312a32" />
+
 
 ---
 
