@@ -66,7 +66,7 @@ jobs:
         run: |
           node -e "
             const pkg = require('./package.json');
-            pkg.name = '@mrbeandev/ai-proxy-gateway';
+            pkg.name = '@doable-team/ai-proxy-gateway';
             require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));
           "
           npm publish --access public

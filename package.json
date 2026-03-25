@@ -38,12 +38,12 @@
   "author": "MrBeanDev (https://github.com/mrbeandev)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mrbeandev/ai-proxy-gateway.git"
+    "url": "git+https://github.com/doable-team/ai-proxy-gateway.git"
   },
   "bugs": {
-    "url": "https://github.com/mrbeandev/ai-proxy-gateway/issues"
+    "url": "https://github.com/doable-team/ai-proxy-gateway/issues"
   },
-  "homepage": "https://github.com/mrbeandev/ai-proxy-gateway#readme",
+  "homepage": "https://github.com/doable-team/ai-proxy-gateway#readme",
   "dependencies": {
     "chalk": "^5.3.0",
     "cors": "^2.8.5",

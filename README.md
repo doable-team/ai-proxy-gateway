@@ -176,7 +176,7 @@ Requests are routed by model name prefix:
 ## Development
 
 ```bash
-git clone https://github.com/mrbeandev/ai-proxy-gateway.git
+git clone https://github.com/doable-team/ai-proxy-gateway.git
 cd ai-proxy-gateway
 npm install
 cd web && npm install && cd ..
@@ -264,4 +264,4 @@ MIT — see [LICENSE](LICENSE)
 
 ---
 
-Made by [@mrbeandev](https://github.com/mrbeandev)
+Made by [@doable-team](https://github.com/doable-team)
