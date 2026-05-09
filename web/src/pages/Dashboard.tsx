@@ -79,9 +79,9 @@ export default function Dashboard() {
   }, [load])
 
   const chartOptions = useMemo((): Highcharts.Options => {
-    const providers = ['openai', 'anthropic', 'gemini']
-    const names: Record<string, string> = { openai: 'OpenAI', anthropic: 'Claude', gemini: 'Gemini' }
-    const colors = { openai: '#5bdcb0', anthropic: '#D4A27F', gemini: '#4285F4' }
+    const providers = ['openai', 'anthropic', 'gemini', 'deepseek']
+    const names: Record<string, string> = { openai: 'OpenAI', anthropic: 'Claude', gemini: 'Gemini', deepseek: 'DeepSeek' }
+    const colors = { openai: '#5bdcb0', anthropic: '#D4A27F', gemini: '#4285F4', deepseek: '#4d6bfe' }
 
     const dayMap = new Map<number, Record<string, number>>()
     for (const row of timeseries) {

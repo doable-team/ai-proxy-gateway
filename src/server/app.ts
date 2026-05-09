@@ -48,6 +48,21 @@ export async function startServer(port: number): Promise<void> {
   // OpenAI-compatible proxy
   app.use('/v1', proxyRouter)
 
+  // JSON 404 for unmatched /api/* and /v1/* requests — must come before the SPA
+  // fallback so API clients (e.g. Cursor BYOK, tunnels) get a structured error
+  // instead of the dashboard HTML.
+  app.all('/api/*', (req, res) => {
+    res.status(404).json({ error: { message: `Unknown API route: ${req.method} ${req.path}`, type: 'not_found' } })
+  })
+  app.all('/v1/*', (req, res) => {
+    res.status(404).json({
+      error: {
+        message: `Unknown endpoint: ${req.method} ${req.path}. Supported: POST /v1/chat/completions, GET /v1/models.`,
+        type: 'not_found',
+      },
+    })
+  })
+
   // Serve frontend static files (production only — in dev, Vite serves on :5173)
   const publicDir = path.join(__dirname, 'public')
   if (fs.existsSync(publicDir)) {

@@ -61,7 +61,7 @@ There are proxy tools like LiteLLM, but they require Python, config files, envir
 ## Features
 
 - **OpenAI-Compatible Proxy** — `/v1/chat/completions` and `/v1/models` endpoints with full streaming (SSE) support
-- **Multi-Provider Routing** — automatically routes `gpt-*` → OpenAI, `claude-*` → Anthropic, `gemini-*` → Google Gemini
+- **Multi-Provider Routing** — automatically routes `gpt-*` → OpenAI, `claude-*` → Anthropic, `gemini-*` → Google Gemini, `deepseek-*` → DeepSeek
 - **Dynamic Model Management** — add, remove, or auto-fetch models from each provider's API
 - **Model Aliases** — create custom names like `fast` → `gpt-4o-mini` or `smart` → `claude-sonnet-4`
 - **Dashboard** — real-time stats, request volume charts, top models breakdown, recent activity feed
@@ -168,6 +168,7 @@ Requests are routed by model name prefix:
 | `gpt-*`, `o1`, `o3*` | OpenAI |
 | `claude-*` | Anthropic |
 | `gemini-*` | Google Gemini |
+| `deepseek-*` | DeepSeek |
 | Custom alias | Resolved to target model first |
 | Any model in service_models | Routes to the owning service |
 

@@ -129,6 +129,8 @@ function runMigrations(db: DatabaseSync) {
     ['gemini-1.5-pro', 0.00125, 0.005],
     ['gemini-1.5-flash', 0.000075, 0.0003],
     ['gemini-pro', 0.0005, 0.0015],
+    ['deepseek-chat', 0.00027, 0.0011],
+    ['deepseek-reasoner', 0.00055, 0.00219],
   ]
   for (const [model, inp, out] of defaultPricing) {
     insertPricing.run(model, inp, out)
@@ -139,6 +141,7 @@ export const DEFAULT_MODELS: Record<string, string[]> = {
   openai: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo', 'o1', 'o3-mini'],
   anthropic: ['claude-opus-4', 'claude-sonnet-4', 'claude-haiku-4', 'claude-3-5-sonnet-20241022', 'claude-3-5-haiku-20241022'],
   gemini: ['gemini-2.0-flash', 'gemini-1.5-pro', 'gemini-1.5-flash'],
+  deepseek: ['deepseek-chat', 'deepseek-reasoner'],
 }
 
 export function seedModelsForService(db: DatabaseSync, serviceId: string, provider: string) {

@@ -149,6 +149,7 @@ export default function Logs() {
             <SelectItem value="openai"><span className="flex items-center gap-2"><img src="/openai.svg" alt="" className="h-3.5 w-3.5" />OpenAI</span></SelectItem>
             <SelectItem value="anthropic"><span className="flex items-center gap-2"><img src="/claude.svg" alt="" className="h-3.5 w-3.5" />Anthropic</span></SelectItem>
             <SelectItem value="gemini"><span className="flex items-center gap-2"><img src="/gemini.svg" alt="" className="h-3.5 w-3.5" />Gemini</span></SelectItem>
+            <SelectItem value="deepseek"><span className="flex items-center gap-2"><img src="/deepseek.svg" alt="" className="h-3.5 w-3.5" />DeepSeek</span></SelectItem>
           </SelectContent>
         </Select>
         <Select value={filters.status || 'all'} onValueChange={v => setFilter('status', v === 'all' ? '' : (v ?? ''))}>

@@ -38,6 +38,7 @@ export function providerColor(provider: string): string {
     case 'openai': return 'var(--color-openai)'
     case 'anthropic': return 'var(--color-anthropic)'
     case 'gemini': return 'var(--color-gemini)'
+    case 'deepseek': return 'var(--color-deepseek)'
     default: return '#888'
   }
 }
@@ -47,6 +48,7 @@ export function providerIcon(provider: string): string | null {
     case 'openai': return '/openai.svg'
     case 'anthropic': return '/claude.svg'
     case 'gemini': return '/gemini.svg'
+    case 'deepseek': return '/deepseek.svg'
     default: return null
   }
 }
@@ -56,6 +58,7 @@ export function providerLabel(provider: string): string {
     case 'openai': return 'OpenAI'
     case 'anthropic': return 'Claude'
     case 'gemini': return 'Gemini'
+    case 'deepseek': return 'DeepSeek'
     default: return provider
   }
 }

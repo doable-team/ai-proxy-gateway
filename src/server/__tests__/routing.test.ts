@@ -10,6 +10,7 @@ function detectProvider(model: string): string | null {
   if (model.startsWith('gpt-') || model.startsWith('o1') || model.startsWith('o3')) return 'openai'
   if (model.startsWith('claude-')) return 'anthropic'
   if (model.startsWith('gemini-') || model.startsWith('models/gemini')) return 'gemini'
+  if (model.startsWith('deepseek-')) return 'deepseek'
   return null
 }
 
@@ -34,6 +35,11 @@ describe('Model → Provider routing', () => {
     it('routes gemini-2.0-flash', () => expect(detectProvider('gemini-2.0-flash')).toBe('gemini'))
     it('routes gemini-1.5-pro', () => expect(detectProvider('gemini-1.5-pro')).toBe('gemini'))
     it('routes models/gemini-pro', () => expect(detectProvider('models/gemini-pro')).toBe('gemini'))
+  })
+
+  describe('DeepSeek models', () => {
+    it('routes deepseek-chat', () => expect(detectProvider('deepseek-chat')).toBe('deepseek'))
+    it('routes deepseek-reasoner', () => expect(detectProvider('deepseek-reasoner')).toBe('deepseek'))
   })
 
   describe('Unknown models', () => {

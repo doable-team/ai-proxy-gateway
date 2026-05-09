@@ -53,6 +53,8 @@ function getServiceForModel(model: string): { service: Service; resolvedModel: s
     provider = 'anthropic'
   } else if (model.startsWith('gemini-') || model.startsWith('models/gemini')) {
     provider = 'gemini'
+  } else if (model.startsWith('deepseek-')) {
+    provider = 'deepseek'
   }
 
   if (!provider) return null
@@ -146,6 +148,20 @@ router.get('/models', (_req, res) => {
   res.json({ object: 'list', data: models })
 })
 
+// Reject non-POST methods on /chat/completions with a clear 405 (otherwise
+// Express returns its default 404 / the SPA fallback returns HTML, which makes
+// users think the endpoint doesn't exist).
+router.all('/chat/completions', (req, res, next) => {
+  if (req.method === 'POST') return next()
+  res.set('Allow', 'POST')
+  res.status(405).json({
+    error: {
+      message: `Method ${req.method} not allowed on /v1/chat/completions. Use POST with a JSON body { "model": "...", "messages": [...] }.`,
+      type: 'method_not_allowed',
+    },
+  })
+})
+
 // POST /v1/chat/completions
 router.post('/chat/completions', async (req: Request, res: Response) => {
   const chatReq = req.body as OpenAIChatRequest
@@ -227,6 +243,9 @@ async function dispatch(
       return proxyAnthropic(chatReq, service.api_key, baseUrl, res as any)
     case 'gemini':
       return proxyGemini(chatReq, service.api_key, baseUrl, res as any)
+    case 'deepseek':
+      // DeepSeek's API is OpenAI-compatible (POST /v1/chat/completions, Bearer auth, SSE).
+      return proxyOpenAI(chatReq, service.api_key, baseUrl, res as any)
     default:
       throw new Error(`Unknown provider: ${service.provider}`)
   }
@@ -237,6 +256,7 @@ function getDefaultBaseUrl(provider: string): string {
     case 'openai': return 'https://api.openai.com'
     case 'anthropic': return 'https://api.anthropic.com'
     case 'gemini': return 'https://generativelanguage.googleapis.com'
+    case 'deepseek': return 'https://api.deepseek.com'
     default: return ''
   }
 }

@@ -87,9 +87,22 @@ async function fetchModelsFromProvider(
       return fetchAnthropicModels()
     case 'gemini':
       return fetchGeminiModels(service.api_key, service.base_url)
+    case 'deepseek':
+      return fetchDeepSeekModels(service.api_key, service.base_url)
     default:
       return []
   }
+}
+
+async function fetchDeepSeekModels(apiKey: string, baseUrl?: string | null): Promise<{ id: string; name?: string }[]> {
+  const base = baseUrl || 'https://api.deepseek.com'
+  const url = `${base.replace(/\/$/, '')}/models`
+  const resp = await fetch(url, { headers: { 'Authorization': `Bearer ${apiKey}` } })
+  if (!resp.ok) throw new Error(`DeepSeek API returned ${resp.status}: ${(await resp.text()).slice(0, 200)}`)
+  const data = await resp.json() as { data?: { id: string }[] }
+  return (data.data || [])
+    .map(m => ({ id: m.id }))
+    .sort((a, b) => a.id.localeCompare(b.id))
 }
 
 async function fetchOpenAIModels(apiKey: string, baseUrl?: string | null, filterChat = true): Promise<{ id: string; name?: string }[]> {

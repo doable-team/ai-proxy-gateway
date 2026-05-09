@@ -19,6 +19,7 @@ const PROVIDERS = [
   { value: 'openai', label: 'OpenAI', icon: '/openai.svg' },
   { value: 'anthropic', label: 'Anthropic (Claude)', icon: '/claude.svg' },
   { value: 'gemini', label: 'Google Gemini', icon: '/gemini.svg' },
+  { value: 'deepseek', label: 'DeepSeek', icon: '/deepseek.svg' },
 ]
 
 function ServiceForm({ initial, onSave, onClose }: { initial?: any; onSave: (d: any) => Promise<any>; onClose: () => void }) {
